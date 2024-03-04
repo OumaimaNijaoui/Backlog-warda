@@ -1,0 +1,47 @@
+version: '3'
+ 
+services:
+ 
+  frontend:
+    build:
+      context: ./angular-project
+    networks:
+      - backlog-warda_net-projet
+    ports:
+      - "82:80"
+    depends_on:
+      - backend
+ 
+ 
+  backend:
+    build:
+      context: ./backend  
+    ports:
+      - "2424:2424"
+    networks:
+      - backlog-warda_net-projet
+    depends_on:
+      - postgres
+    
+ 
+ 
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    networks:
+      - backlog-warda_net-projet
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: warda
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+ 
+ 
+volumes:
+  pg_data:
+networks:  
+  backlog-warda_net-projet:
